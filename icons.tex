@@ -1,3 +1,17 @@
+%% Code for drawing vector icons using TikZ
+%% To make a new icon:
+%%   - install svg2tikz (http://xyz2tex.github.io/svg2tikz/install.html)
+%%   - open image with InkScape
+%%   - Click Extension/export/Export to tikz path
+%%   - Copy exported code to create new command using this template:
+%%       \newcommand{\myicon}[<number of arguments>]{
+%%         \resizebox{#1}{
+%%           <insert tikzpicture code here,
+%%            replacing colors with `#2`.
+%%            For more colors, use `#3`, `#4`, etc.>
+%%         }
+%%       }
+
 \newcommand{\globe}[2]{
     \resizebox{#1}{!}{
         \begin{tikzpicture}[y=1cm, x=1cm, inner sep=0pt, outer sep=0pt]

@@ -1,3 +1,8 @@
+%% UCL poster template
+%% Kevin O'Neill, 2025
+%% Package options:
+%%   - purple, green, blue, yellow, green, pink: different color themes
+
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ucl}[2025 UCL Poster Template]
 
@@ -8,15 +13,22 @@
 \RequirePackage{graphicx}
 \graphicspath{{./img/}}
 
-%% set up fonts
-\RequirePackage{fontspec}
-\setmainfont{Arial}
+%% set up fonts: default to all Arial, 
+%% option garamond for Garamond body text
+\RequirePackage{anyfontsize}
+\RequirePackage[no-math]{fontspec}
+\newfontfamily\titlefont{Arial}
+\newboolean{garamond} 
+\setboolean{garamond}{false}
+\DeclareOption{garamond}{
+    \setboolean{garamond}{true}
+}
 
 \input{icons}
 \input{ucl_logo}
 
 %% set up UCL color palette
-\definecolor{UCL_gray}{gray}{0.85}
+\definecolor{UCL_gray}{gray}{0.9}
 \definecolor{UCL_purple}{RGB}{80,7,120}
 \definecolor{UCL_green}{RGB}{82,193,82}
 \definecolor{UCL_blue}{RGB}{52,198,198}
@@ -39,7 +51,7 @@
     \definecolor{banner}{named}{black}
     \definecolor{background}{named}{white}
     \definecolor{portico}{named}{white}
-    \definecolor{block}{gray}{.8}
+    \definecolor{block}{gray}{0.9}
     \definecolor{text}{named}{black}
  }{ % Background Colors
     \colorlet{backgroundcolor}{background}
@@ -53,10 +65,10 @@
     \colorlet{blockbodybgcolor}{block}
     \colorlet{blockbodyfgcolor}{text}
     % Innerblock Colors
-    \colorlet{innerblocktitlebgcolor}{white}
-    \colorlet{innerblocktitlefgcolor}{black}
-    \colorlet{innerblockbodybgcolor}{white}
-    \colorlet{innerblockbodyfgcolor}{black}
+    \colorlet{innerblocktitlebgcolor}{banner}
+    \colorlet{innerblocktitlefgcolor}{title}
+    \colorlet{innerblockbodybgcolor}{background!20}
+    \colorlet{innerblockbodyfgcolor}{text}
     % Note colors
     \colorlet{notefgcolor}{black}
     \colorlet{notebgcolor}{black}
@@ -80,10 +92,10 @@
         \definecolorpalette{UCL}{
             \definecolor{title}{named}{white}
             \definecolor{banner}{named}{UCL_purple}
-            \definecolor{background}{named}{white}
+            \definecolor{background}{named}{UCL_muted_purple}
             \definecolor{portico}{named}{white}
-            \definecolor{block}{named}{UCL_muted_purple}
-            \definecolor{text}{named}{UCL_dark_purple}
+            \definecolor{block}{named}{white}
+            \definecolor{text}{named}{black}
         }
     }
 }
@@ -92,10 +104,10 @@
         \definecolorpalette{UCL}{
             \definecolor{title}{named}{white}
             \definecolor{banner}{named}{UCL_dark_green}
-            \definecolor{background}{named}{white}
+            \definecolor{background}{named}{UCL_muted_green}
             \definecolor{portico}{named}{white}
-            \definecolor{block}{named}{UCL_muted_green}
-            \definecolor{text}{named}{UCL_dark_green}
+            \definecolor{block}{named}{white}
+            \definecolor{text}{named}{black}
         }
     }
 }
@@ -104,9 +116,9 @@
         \definecolorpalette{UCL}{
             \definecolor{title}{named}{white}
             \definecolor{banner}{named}{UCL_dark_blue}
-            \definecolor{background}{named}{white}
+            \definecolor{background}{named}{UCL_muted_blue}
             \definecolor{portico}{named}{white}
-            \definecolor{block}{named}{UCL_muted_blue}
+            \definecolor{block}{named}{white}
             \definecolor{text}{named}{UCL_dark_blue}
         }
     }
@@ -127,17 +139,22 @@
     \renewcommand{\defineUCLpalette}{
         \definecolorpalette{UCL}{
             \definecolor{banner}{named}{UCL_pink}
-            \definecolor{background}{named}{white}
+            \definecolor{background}{named}{UCL_muted_pink}
             \definecolor{portico}{named}{white}
-            \definecolor{block}{named}{UCL_muted_pink}
+            \definecolor{block}{named}{white}
             \definecolor{text}{named}{UCL_dark_pink}
         }
     }
 }
 
-
 \ProcessOptions\relax
 
+\ifgaramond
+    \setmainfont{Garamond Libre}
+\else
+    \setmainfont{Arial}
+    
+\fi
 
 %% define title layout
 \definetitlestyle{UCLtitle}{
@@ -149,7 +166,7 @@
     %% draw banner above the UCL logo
     \draw[draw=none, fill=titlebgcolor, inner sep=0pt] ($(logo.north west)+(0, -1mm)$) rectangle (\titleposright, \titlepostop);
     %% draw banner to the left of the UCL logo
-    \draw[draw=none, fill=titlebgcolor, inner sep=0pt] (bottomleft) rectangle ($(bottomleft) + (\paperwidth, .4\titleheight)$);
+    \draw[draw=none, fill=titlebgcolor, inner sep=0pt] (bottomleft) rectangle ($(bottomleft) + (\paperwidth, .5\titleheight)$);
 }
 
 %% Use standard rectangular blocks according to the color scheme
@@ -162,6 +179,16 @@
     \fi
 }
 
+%% Use standard inner blocks according to the color scheme
+\defineinnerblockstyle{UCLinnerblock}{
+    titlewidthscale=1, bodywidthscale=1,titleleft, titleoffsetx=0pt, titleoffsety=0pt, bodyoffsetx=0mm, bodyoffsety=15mm, bodyverticalshift=10mm, titleinnersep=6mm, bodyinnersep=1cm
+}{
+    \draw[color=framecolor, fill=innerblockbodybgcolor, draw=none] (innerblockbody.south west) rectangle (innerblockbody.north east);
+    \ifInnerblockHasTitle
+    \draw[color=framecolor, fill=innerblocktitlebgcolor, draw=none] (innerblocktitle.south west) rectangle (innerblocktitle.north east);
+    \fi
+}
+
 %% choose layout theme
 \defineUCLpalette
 \definelayouttheme{UCL}{
@@ -169,7 +196,7 @@
     \usebackgroundstyle{Default} % Default, Rays, VerticalGradation, BottomVerticalGradation, Empty
     \usetitlestyle{UCLtitle} % Default, Basic, Envelope, Wave, VerticalShading, Filled, Empty
     \useblockstyle{UCLblock} % Default, Basic, Minimal, Envelope, Corner, Slide, TornOut
-    \useinnerblockstyle[roundedcorners=0, titleleft]{Default} % Default, Table
+    \useinnerblockstyle[roundedcorners=0, titleleft]{UCLinnerblock} % Default, Table
     \usenotestyle{Default} % Default, Corner, VerticalShading, Sticky
 }
 \usetheme{UCL}
@@ -178,11 +205,22 @@
 \settitle{\vbox{
     \vspace{1cm}
     \color{titlefgcolor} 
+    \titlefont
     {\fontsize{72}{86}\selectfont\bfseries \@title \par}
     \vspace*{1em}
     {\fontsize{48}{58}\selectfont \@author \par} 
     \vspace*{1em} 
     {\fontsize{28}{34}\selectfont \@institute}
 }}
+
+%% Set block fonts
+\RequirePackage{xpatch}
+\xpatchcmd{\block}{\bf}{\bfseries\titlefont}{}{}
+\xpatchcmd{\innerblock}{\bf}{\titlefont\bfseries}{}{}
+
+%% Patch block/innerblock titles so that they are always the same height
+\xpatchcmd{\block}{#2\par}{#2\vphantom{Ayg}\par}{}{}
+\xpatchcmd{\innerblock}{#2\par}{#2\vphantom{Ayg}\par}{}{}
+
 
 \endinput

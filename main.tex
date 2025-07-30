@@ -1,10 +1,12 @@
 \documentclass[25pt, a0paper, landscape, margin=0mm, innermargin=15mm, blockverticalspace=15mm, colspace=15mm, subcolspace=8mm]{tikzposter}
 
-\usepackage[purple]{ucl}    %% for pretty fonts/colors
+\usepackage[]{ucl}    %% for pretty fonts/colors
 \usepackage[style=apa,backend=biber]{biblatex} %% for APA citation
-\usepackage{anyfontsize}   %% for font sizes
-\usepackage{blindtext}     %% for filler text- delete this line
 
+\usepackage{blindtext}     %% for filler text- delete this line
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{img/}}              %% set graphics path
 \addbibresource{references.bib}  %% import bibliography file
 
 \begin{document}
@@ -16,9 +18,71 @@
 
 \begin{columns}
     \column{0.5}
-    \block{Introduction}{\blindtext}
+    \block{Introduction}{
+        \textcite{fleming2024} said some things...
+         (\citeyear{fleming2014})
+        \vspace{\baselineskip}
+        
+        \blindtext
+    }
 
     \column{0.5}
-    \block{Results}{\blindtext}
+    \block{Methods}{
+        We used a method from \parencite{fleming2014}...
+
+        \vspace{\baselineskip}
+        
+        \blindtext
+    }
+\end{columns}
+\begin{columns}
+    \column{0.6}
+    \block{Results}{
+        As you can see, we made a nice looking figure:
+
+        \vspace{\baselineskip}
+
+        \centering
+        %% if possible, always include vector images
+        %% e.g., .svg, .pdf
+        \includegraphics[width=.5\colwidth]{ROC.pdf}
+    }
+
+    \column{0.4}
+    \block{Conclusions}{
+        \begin{minipage}{.45\colwidth}
+            \vspace{.25\baselineskip}
+            \begin{enumerate}
+                \item First conclusion
+                \item Second conclusion
+                \item Take-home message
+            \end{enumerate}
+            
+            \renewcommand*{\bibfont}{\normalfont\scriptsize}
+            \printbibliography[]
+        \end{minipage}
+        \hfill
+        \fcolorbox{banner}{banner}{
+            \begin{minipage}{.4\colwidth}
+                \color{background}
+                \vspace{.5\baselineskip}
+                {\bfseries\Large\hspace{.5em} Contact us!}
+                \vspace{.5\baselineskip}
+                
+                \centering
+                \begin{minipage}{.75\linewidth}
+                    \vspace{.5\baselineskip}
+                    \href{https://my_website.org}{\raisebox{-0.25\height}{\globe{\baselineskip}{block}} \hspace{0.5cm} https://my\_website.org}
+                    
+                    \vspace{.25\baselineskip}
+                    \href{mailto:my_email@ucl.ac.uk}{\raisebox{-0.25\height}{\envelope{\baselineskip}{block}} \hspace{0.5cm} my\_email@ucl.ac.uk}
+                    
+                    \vspace{.25\baselineskip}
+                    \href{https://bsky.app/profile/my_bsky.bsky.social}{\raisebox{-0.25\height}{\bsky{\baselineskip}{block}} \hspace{0.5cm} @my\_bsky.bsky.social}
+                    \vspace{.5\baselineskip}
+                \end{minipage}   
+            \end{minipage}
+        }
+    }
 \end{columns}
 \end{document}
